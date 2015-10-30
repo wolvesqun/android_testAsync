@@ -42,25 +42,58 @@ public class MainActivity extends Activity {
 		
 		
 		
-		
-		
-//		String URLString = "http://www.mbalib.com/appwiki/article?width=100&offset=0&num=10";
-		
-//		String URLString = "http://www.dev.mbalib.com/appwiki/test2?pp=********************";
-		String URLString = "http://wiki.mbalib.com/client?app=1&action=search&format=json&full=1&term=什么";
-		// http://wiki.mbalib.com/client?app=1&action=search&format=json&term=&full=1
-		// http://wiki.mbalib.com/client?app=1&action=search&format=json&term=&full=1
+		testGET();
+
+
+	}
+	
+	public void testGET()
+	{
+		String URLString = "http://www.weather.com.cn/adat/sk/101010100.html";
 		Map<String,String> header = new HashMap<String, String>();
-//		header.put("uu", "vv");
+		
 		WFAsyncHttpManager.get(URLString, header, WFHttpCachePolicy.WFAsyncCachePolicyType_Default, new WFHttpResponseHandler() {
 
-			@Override
+			/**
+			 * 如果不是json则调用这个方法
+			 */
 			public void onSuccess(byte[] responseByte, boolean cache) {
 				
 			}
 
+			/**
+			 * 如果是json数据，则成功调用这个方法（主线程）
+			 */
+			public void onSuccess(Object responseJSON, boolean cache) {
+				
+			}
+
+			/**
+			 * 网络错误回调
+			 */
+			public void onFailure(Throwable t) {
+				
+			}
+		});
+	}
+	
+	public void testPOST()
+	{
+		String URLString = "http://www.weather.com.cn/adat/sk/101010100.html";
+		Map<String,String> header = new HashMap<String, String>();
+		header.put("user-agent", "version---------");
+		
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("aa", "bb");
+		WFAsyncHttpManager.post(URLString, param, header, WFHttpCachePolicy.WFAsyncCachePolicyType_Default, new WFHttpResponseHandler() {
+
 			@Override
 			public void onSuccess(Object responseJSON, boolean cache) {
+				
+			}
+
+			@Override
+			public void onSuccess(byte[] responseByte, boolean cache) {
 				
 			}
 
@@ -69,36 +102,6 @@ public class MainActivity extends Activity {
 				
 			}
 		});
-
-		
-//		Map<String, String> requestPram = new HashMap<String, String>();
-//		requestPram.put("term", "百度");
-//		WFAsyncHttpManager.post(URLString, requestPram, null, WFHttpCachePolicy.WFAsyncCachePolicyType_Default, new WFHttpResponseHandler() {
-//
-//			@Override
-//			public void onSuccess(byte[] responseByte, boolean cache) {
-//				
-//			}
-//
-//			@Override
-//			public void onSuccess(Object responseJSON, boolean cache) {
-//				JSONArray jsonArray = (JSONArray) responseJSON;
-//				
-//				
-//				TextView tv = (TextView) findViewById(R.id.textView);
-//				if(cache)
-//				{
-//					tv.setText(jsonArray.toString());
-//				}
-//				
-//			}
-//
-//			@Override
-//			public void onFailure(Throwable t) {
-//				
-//			}
-//			
-//		});
 	}
 	
 	public void testSave()
