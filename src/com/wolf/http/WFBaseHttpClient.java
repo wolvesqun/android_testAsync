@@ -1,5 +1,6 @@
 package com.wolf.http;
 
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,37 +8,44 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.DownloadManager.Request;
-
-import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.AsyncHttpClient;
 import com.wolf.http.cache.WFHttpCacheManager;
 
-
+/**
+ * 请求基类
+ * @author wolvesqun
+ *
+ */
 public class WFBaseHttpClient {
 
-	private Map<String, String> headers = new HashMap<String, String>();
+	private Map<String, String> mHeaders = new HashMap<String, String>();
 	private WFHttpCachePolicy mCachePolicy;
-	private String URLString;
-	protected WFHttpResponseHandlerInter responseHandler;
+	private String mURLString;
+	protected WFHttpResponseHandlerInter mResponseHandlerCallback;
 
+	/**
+	 * 处理json请求
+	 * @param bt
+	 * @param cache
+	 */
 	public void handleJSON(byte[] bt, boolean cache)
 	{
 		String jsonString = WFAsyncHttpUtil.convertByteToString(bt);
 		
 		try {
-			if(responseHandler != null && jsonString != null){
+			if(mResponseHandlerCallback != null && jsonString != null){
 				JSONObject jsonObj = new JSONObject(jsonString);
-				responseHandler.onSuccess(jsonObj, cache);
+				mResponseHandlerCallback.onSuccess(jsonObj, cache);
 			}
 			else {
 				handleByte(bt, cache);
 			}
 			
 		}catch (JSONException e) {
-			if(responseHandler != null && jsonString != null){
+			if(mResponseHandlerCallback != null && jsonString != null){
 				try {
 					JSONArray jsonArray = new JSONArray(jsonString);
-					responseHandler.onSuccess(jsonArray, cache);
+					mResponseHandlerCallback.onSuccess(jsonArray, cache);
 				} catch (Throwable e1) {
 					handleByte(bt, cache);
 				}
@@ -54,25 +62,38 @@ public class WFBaseHttpClient {
 	
 	public void handleByte(byte[] bt, boolean cache)
 	{
-		if(responseHandler != null)
+		if(mResponseHandlerCallback != null)
 		{
-			responseHandler.onSuccess(bt, cache);
+			mResponseHandlerCallback.onSuccess(bt, cache);
 		}
 	}
 	
 	public void handleFailure(Throwable t)
 	{
-		if(responseHandler != null)
+		if(mResponseHandlerCallback != null)
 		{
-			responseHandler.onFailure(t);
+			mResponseHandlerCallback.onFailure(t);
+		}
+	}
+	
+	protected void setHeader(AsyncHttpClient httpClient)
+	{
+		if(this.mHeaders != null)
+		{
+			for(Map.Entry<String, String> entry : this.mHeaders.entrySet())
+			{
+				String key = entry.getKey();
+				String value = entry.getValue();
+				httpClient.addHeader(key, value);
+			}
 		}
 	}
 	
 	public void addHeader(String key, String value)
 	{
-		if(key != null && value != null)
+		if(key != null && key.length() > 0 && value != null && value.length() > 0)
 		{
-			headers.put(key, value);
+			mHeaders.put(key, value);
 		}
 		
 	}
@@ -125,11 +146,11 @@ public class WFBaseHttpClient {
 	
 	
 	public String getURLString() {
-		return URLString;
+		return mURLString;
 	}
 
 	public void setURLString(String uRLString) {
-		URLString = uRLString;
+		mURLString = uRLString;
 	}
 
 	public WFHttpCachePolicy getPolicy() {

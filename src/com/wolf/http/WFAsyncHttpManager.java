@@ -5,9 +5,15 @@ import java.util.List;
 import java.util.Map;
 
 import com.loopj.android.http.RequestParams;
+import com.wolf.http.util.WFHttpTool;
 
 import android.util.Log;
 
+/**
+ * http请求接口
+ * @author wolvesqun
+ *
+ */
 public class WFAsyncHttpManager {
 	
 	private WFAsyncHttpClientResourse httpClientResourse = new WFAsyncHttpClientResourse();
@@ -53,12 +59,12 @@ public class WFAsyncHttpManager {
 	 * @param cachePolicy
 	 * @param handle
 	 */
-	public static void post(String URLString, RequestParams params, Map<String, String> headers, WFHttpCachePolicy cachePolicy, final WFHttpResponseHandler handle)
+	public static void post(String URLString, Map<String, String> params, Map<String, String> headers, WFHttpCachePolicy cachePolicy, final WFHttpResponseHandler handle)
 	{
 		final WFAsyncHttpClient client = getInstance().getHttpClient();
 		client.setPolicy(cachePolicy);
 		client.addHeader(headers);
-		client.post(URLString, params, headers, new WFHttpResponseHandler() {
+		client.post(URLString, params, new WFHttpResponseHandler() {
 
 			@Override
 			public void onSuccess(byte[] responseByte, boolean cache) {

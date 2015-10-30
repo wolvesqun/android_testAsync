@@ -3,9 +3,14 @@ package com.wolf.http.util;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
+import java.util.Map;
 
-import android.content.pm.PackageManager;
+import org.apache.http.client.utils.URLEncodedUtils;
+
+import com.loopj.android.http.RequestParams;
 
 
 /**
@@ -89,6 +94,23 @@ public class WFHttpTool {
 	    }
 	    return hex.toString();
 	}
+	
+	public static RequestParams convertMapToRequestParam(Map<String, String> mapParam)
+	{
+		RequestParams rParam = null;
+		if(mapParam != null)
+		{
+			rParam = new RequestParams();
+			for(Map.Entry<String, String> entry : mapParam.entrySet())
+			{
+				String key = entry.getKey();
+				String value = URLDecoder.decode(entry.getValue());
+				rParam.put(key, value);
+			}
+		}
+		return rParam;
+	}
+	
 	
 	
 	
