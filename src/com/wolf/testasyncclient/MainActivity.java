@@ -52,20 +52,34 @@ public class MainActivity extends Activity {
 		String URLString = "http://www.weather.com.cn/adat/sk/101010100.html";
 		Map<String,String> header = new HashMap<String, String>();
 		
-		WFAsyncHttpManager.get(URLString, header, WFHttpCachePolicy.WFAsyncCachePolicyType_Default, new WFHttpResponseHandler() {
+		WFAsyncHttpManager.get(URLString, header, WFHttpCachePolicy.WFAsyncCachePolicyType_ReturnCache_DidLoad, new WFHttpResponseHandler() {
 
 			/**
 			 * 如果不是json则调用这个方法
 			 */
 			public void onSuccess(byte[] responseByte, boolean cache) {
-				
+				if(cache) // 缓存数据
+				{
+					
+				}
+				else 
+				{
+					
+				}
 			}
 
 			/**
 			 * 如果是json数据，则成功调用这个方法（主线程）
 			 */
 			public void onSuccess(Object responseJSON, boolean cache) {
-				
+				if(cache) // 缓存数据
+				{
+					
+				}
+				else 
+				{
+					
+				}
 			}
 
 			/**
@@ -79,7 +93,7 @@ public class MainActivity extends Activity {
 	
 	public void testPOST()
 	{
-		String URLString = "http://www.weather.com.cn/adat/sk/101010100.html";
+		String URLString = "你的URL";
 		Map<String,String> header = new HashMap<String, String>();
 		header.put("user-agent", "version---------");
 		
