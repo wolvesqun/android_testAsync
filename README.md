@@ -2,10 +2,10 @@
  
    注意：本框架是有做缓存策略的，支持四种缓存
    
-	 WFAsyncCachePolicyType_Default,                     // *** 不提供缓存
-	 WFAsyncCachePolicyType_ReturnCache_DontLoad,        // *** 返回缓存
-	 WFAsyncCachePolicyType_ReturnCache_DidLoad,         // *** 返回缓存并且加载
-	 WFAsyncCachePolicyType_Reload_IgnoringLocalCache,   // *** 忽略本地缓存并加载 （使用在更新缓存）
+	 1. WFAsyncCachePolicyType_Default,                     // *** 不提供缓存
+	 2. WFAsyncCachePolicyType_ReturnCache_DontLoad,        // *** 返回缓存
+	 3. WFAsyncCachePolicyType_ReturnCache_DidLoad,         // *** 返回缓存并且加载
+	 4. WFAsyncCachePolicyType_Reload_IgnoringLocalCache,   // *** 忽略本地缓存并加载 （使用在更新缓存）
   
   
 一：使用教程：
