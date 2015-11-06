@@ -11,7 +11,7 @@
 一：使用教程：
 
     1. 添加框架， android-async-http-1.4.5.jar
-    2. 设置 Context : 在MainActivity设置	WFHttpEnvironment.setContext(this);
+    2. 设置 Context : 在MainActivity设置	WFHttpEnvironment.setActivity(this);
     3  引入文件，import com.wolf.http.WFAsyncHttpManager;
     
 二：请求
