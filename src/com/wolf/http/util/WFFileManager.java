@@ -2,8 +2,12 @@ package com.wolf.http.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import android.content.pm.PackageManager;
 import android.os.Environment;
@@ -16,6 +20,56 @@ import android.util.Base64;
  *
  */
 public class WFFileManager {
+	
+	/**
+	 * 保存对象
+	 * @param obj
+	 * @param key
+	 * @param folder
+	 * @return
+	 */
+	public static boolean saveObject(Object obj, String key, String folder)
+	{
+		boolean rs = false;
+		
+		if(obj == null || key == null || key.length() == 0 || folder == null || folder.length() == 0) return rs;
+		if(!(obj instanceof Serializable)) return false;
+				
+		String filePath = getFilePath(key, folder);
+		
+		
+		FileOutputStream fos = null;
+		ObjectOutputStream os = null;
+		try {
+			if(WFFileManager.isExist(filePath))
+			{
+				deleteFile(filePath);
+			}
+			if(WFFileManager.createFile(filePath))
+			{
+				fos = new FileOutputStream(filePath);
+				os = new ObjectOutputStream(fos);
+				os.writeObject(obj);
+				os.close();
+				rs = true;
+			}
+		} catch (Throwable e){
+			
+		}
+		finally
+		{
+			try {
+				if(fos != null)
+				{
+					fos.close();
+				}
+				if(os != null) os.close();
+			} catch (Throwable e) {
+			
+			}
+		}
+		return rs;
+	}
 	
 	/**
 	 * 保存
@@ -61,6 +115,7 @@ public class WFFileManager {
 		return rs;
 	}
 	
+	
 	/**
 	 * 删除单个文件
 	 * @param filePath
@@ -90,7 +145,15 @@ public class WFFileManager {
 		return deleteDirectory(getBaseFolder(folder));
 	}
 	
-	
+	public static Object readObject(String key, String folder)
+	{
+		Object obj = null;
+		if((obj = readObject(getSDFilePath(key, folder))) == null)
+		{
+			obj = readObject(getPhoneFilePath(key, folder));
+		}
+		return obj;
+	}
 	
 	public static byte[] read(String key, String folder)
 	{
@@ -234,6 +297,31 @@ public class WFFileManager {
 			
 		}
 		return bt;
+	}
+	
+	private static Object readObject(String filepath)
+	{
+		Object obj = null;
+		ObjectInputStream ois = null;
+		FileInputStream fis = null;
+		try {
+			fis = new FileInputStream(filepath);
+			ois = new ObjectInputStream(fis);
+			obj = ois.readObject();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally
+		{
+			try {
+				if(fis != null) fis.close();
+				if(ois != null) ois.close();
+			} catch (Exception e2) {
+				// TODO: handle exception
+			}
+			
+		}
+		return obj;
 	}
 	
 	/**

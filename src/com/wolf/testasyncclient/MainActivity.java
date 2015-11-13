@@ -16,6 +16,7 @@ import com.wolf.http.WFHttpCachePolicy;
 import com.wolf.http.WFHttpResponseHandler;
 import com.wolf.http.cache.WFHttpCacheManager;
 import com.wolf.http.util.WFHttpEnvironment;
+import com.wolf.testasyncclient.bean.WFUser;
 
 
 public class MainActivity extends Activity {
@@ -28,7 +29,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		WFHttpEnvironment.setContext(this);
+		WFHttpEnvironment.setActivity(this);
 		
 //		WFHttpCacheManager.save("aaaaa".getBytes(), "asdfasdfad");
 		
@@ -42,15 +43,21 @@ public class MainActivity extends Activity {
 		
 		
 		
-		testGET();
+//		testGET();
+		testPOST();
+		
+//		testSaveObject();
 
-
+		
 	}
 	
 	public void testGET()
 	{
-		String URLString = "http://www.weather.com.cn/adat/sk/101010100.html";
+//		String URLString = "http://www.weather.com.cn/adat/sk/101010100.html";
+		String URLString = "http://192.168.1.12/index.php?username=什么";
 		Map<String,String> header = new HashMap<String, String>();
+		header.put("aa", "aa_value");
+		header.put("bb", "什物");
 		
 		WFAsyncHttpManager.get(URLString, header, WFHttpCachePolicy.WFAsyncCachePolicyType_ReturnCache_DidLoad, new WFHttpResponseHandler() {
 
@@ -73,12 +80,10 @@ public class MainActivity extends Activity {
 			 */
 			public void onSuccess(Object responseJSON, boolean cache) {
 				if(cache) // 缓存数据
-				{
-					
+				{	
 				}
 				else 
 				{
-					
 				}
 			}
 
@@ -93,12 +98,14 @@ public class MainActivity extends Activity {
 	
 	public void testPOST()
 	{
-		String URLString = "你的URL";
+		String URLString = "http://192.168.1.12/index.php";
 		Map<String,String> header = new HashMap<String, String>();
 		header.put("user-agent", "version---------");
+		header.put("ok", "version_什么");
 		
 		Map<String, String> param = new HashMap<String, String>();
-		param.put("aa", "bb");
+		param.put("aa", "aa_value");
+		param.put("cc", "呵呵");
 		WFAsyncHttpManager.post(URLString, param, header, WFHttpCachePolicy.WFAsyncCachePolicyType_Default, new WFHttpResponseHandler() {
 
 			@Override
@@ -165,6 +172,22 @@ public class MainActivity extends Activity {
 		WFHttpCacheManager.deleteCache(key);
 	}
 	
+	public void testSaveObject()
+	{
+		WFUser user = new WFUser();
+		user.setUsername("fasdfjapsdjfasdf");
+		boolean rs = WFHttpCacheManager.saveObject(user, "user");
+		
+		boolean isExist = WFHttpCacheManager.isExist("user");
+		
+		
+		WFUser tempUser = (WFUser) WFHttpCacheManager.readObject("user");
+		
+		WFHttpCacheManager.deleteCache("user");
+		
+		boolean isExist2 = WFHttpCacheManager.isExist("user");
+		WFUser tempUser2 = (WFUser) WFHttpCacheManager.readObject("user");
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

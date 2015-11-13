@@ -1,9 +1,11 @@
 package com.wolf.http;
 
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.http.client.CookieStore;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +23,15 @@ public class WFBaseHttpClient {
 	private Map<String, String> mHeaders = new HashMap<String, String>();
 	private WFHttpCachePolicy mCachePolicy;
 	private String mURLString;
+	private CookieStore mCookieStore = null;
+	public CookieStore getmCookieStore() {
+		return mCookieStore;
+	}
+
+	public void setmCookieStore(CookieStore mCookieStore) {
+		this.mCookieStore = mCookieStore;
+	}
+
 	protected WFHttpResponseHandlerInter mResponseHandlerCallback;
 
 	/**
@@ -76,7 +87,7 @@ public class WFBaseHttpClient {
 		}
 	}
 	
-	protected void setHeader(AsyncHttpClient httpClient)
+	protected void addHeader(AsyncHttpClient httpClient)
 	{
 		if(this.mHeaders != null)
 		{
@@ -84,8 +95,22 @@ public class WFBaseHttpClient {
 			{
 				String key = entry.getKey();
 				String value = entry.getValue();
-				httpClient.addHeader(key, value);
+				if(key != null && value != null)
+				{
+					value = URLDecoder.decode(value);
+					value = URLEncoder.encode(value);
+					httpClient.addHeader(key, value);
+				}
+				
 			}
+		}
+	}
+	
+	protected void addCookieStore(AsyncHttpClient httpClient)
+	{
+		if(httpClient != null && this.getmCookieStore() != null)
+		{
+			httpClient.setCookieStore(this.getmCookieStore());
 		}
 	}
 	
@@ -106,7 +131,12 @@ public class WFBaseHttpClient {
 		{
 			String key = entry.getKey();
 			String value = entry.getValue();
-			addHeader(key, value);
+			if(key !=null && value != null)
+			{
+				addHeader(key, value);
+			}
+			
+			
 		}
 	}
 	

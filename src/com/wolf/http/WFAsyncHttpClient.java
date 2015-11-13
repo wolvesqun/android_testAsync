@@ -32,7 +32,8 @@ public class WFAsyncHttpClient extends WFBaseHttpClient{
 		this.mResponseHandlerCallback = responseCallback;
 		this.setURLString(URLString);
 		if(handleCache(URLString, this.getPolicy())) return;
-		setHeader(httpClient);
+		addHeader(httpClient);
+		addCookieStore(httpClient);
 		httpClient.get(URLString, new TextHttpResponseHandler() {
 			
 			@Override
@@ -48,21 +49,6 @@ public class WFAsyncHttpClient extends WFBaseHttpClient{
 				cancer();
 			}
 		});
-//		httpClient.get(URLString, new DataAsyncHttpResponseHandler() {
-//			
-//			@Override
-//			public void onSuccess(int arg0, Header[] header, byte[] bt) {
-//				saveCache(URLString, bt);
-//				handleJSON(bt, false);
-//				cancer();
-//			}
-//			
-//			@Override
-//			public void onFailure(int arg0, Header[] header, byte[] bt, Throwable th) {
-//				handleFailure(th);
-//				cancer();
-//			}
-//		});
 	}
 	
 	/**
@@ -77,7 +63,8 @@ public class WFAsyncHttpClient extends WFBaseHttpClient{
 		this.mResponseHandlerCallback = handle;
 		this.setURLString(URLString);
 		if(handleCache(URLString, this.getPolicy())) return;
-		setHeader(httpClient);
+		addHeader(httpClient);
+		addCookieStore(httpClient);
 		httpClient.post(URLString, WFHttpTool.convertMapToRequestParam(params), new TextHttpResponseHandler() {
 			
 			@Override
@@ -93,21 +80,6 @@ public class WFAsyncHttpClient extends WFBaseHttpClient{
 				cancer();
 			}
 		});
-//		httpClient.post(URLString, WFHttpTool.convertMapToRequestParam(params), new DataAsyncHttpResponseHandler() {
-//			
-//			@Override
-//			public void onSuccess(int arg0, Header[] header, byte[] bt) {
-//				handleJSON(bt, false);
-//				cancer();
-//			}
-//			
-//			@Override
-//			public void onFailure(int arg0, Header[] header, byte[] bt, Throwable th) {
-//				handleFailure(th);
-//				cancer();
-//			}
-//		});
-		
 	}
 
 	public void cancer()

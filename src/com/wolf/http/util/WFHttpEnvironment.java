@@ -1,5 +1,6 @@
 package com.wolf.http.util;
 
+import android.app.Activity;
 import android.content.Context;
 
 public class WFHttpEnvironment{
@@ -8,15 +9,23 @@ public class WFHttpEnvironment{
 	public static final String kWFCompany = "mbalib";
 	
 	private static Context mContext;
-	
-	public static void setContext(Context context)
-	{
-		mContext = context;
-	}
+	private static Activity mActivity;
 	
 	public static Context getContext()
 	{
 		return mContext;
+	}
+	
+	public static Activity getActivity()
+	{
+		return mActivity;
+	}
+	
+	public static void setActivity(Activity activity)
+	{
+		if(mActivity != null) return;
+		mActivity = activity;
+		mContext = activity.getApplicationContext();
 	}
 
 }

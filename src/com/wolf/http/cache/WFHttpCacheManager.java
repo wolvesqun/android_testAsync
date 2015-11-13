@@ -5,6 +5,12 @@ import com.wolf.http.util.WFHttpTool;
 
 public class WFHttpCacheManager {
 
+	public static boolean saveObject(Object obj, String key)
+	{
+		if(obj == null || key == null || key.length() == 0) return false;
+		return WFFileManager.saveObject(obj, key, getBaseFolder(key));
+	}
+	
 	/**
 	 * 保存数据
 	 * @param bt -》数据
@@ -54,6 +60,11 @@ public class WFHttpCacheManager {
 		removeCache(WFHttpCacheFolderType.WFHttpCacheFolderType_Image);
 	}
 	
+	public static void removeDefaultCache()
+	{
+		removeCache(WFHttpCacheFolderType.WFHttpCacheFolderType_Default);
+	}
+	
 	/**
 	 * 删除所有网页文件缓存
 	 */
@@ -66,6 +77,13 @@ public class WFHttpCacheManager {
 	{
 		if(key == null || key.length() == 0) return null;
 		return WFFileManager.read(key, getBaseFolder(key));
+	}
+	
+	public static Object readObject(String key)
+	{
+		if(key == null || key.length() == 0) return null;
+		
+		return WFFileManager.readObject(key, getBaseFolder(key));
 	}
 	
 	public static boolean isExist(String key)

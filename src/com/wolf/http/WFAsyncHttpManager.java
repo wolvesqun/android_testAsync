@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.client.CookieStore;
+
 import com.loopj.android.http.RequestParams;
 import com.wolf.http.util.WFHttpTool;
 
@@ -24,11 +26,12 @@ public class WFAsyncHttpManager {
 	 * @param header 
 	 * @param handler callback
 	 */
-	public static void get(String URLString, Map<String, String> headers, WFHttpCachePolicy cachePolicy, final WFHttpResponseHandler handle)
+	public static void get(String URLString, Map<String, String> headers, WFHttpCachePolicy cachePolicy, CookieStore cookieStore,final WFHttpResponseHandler handle)
 	{
 		final WFAsyncHttpClient client = getInstance().getHttpClient();
 		client.setPolicy(cachePolicy);
 		client.addHeader(headers);
+		client.setmCookieStore(cookieStore);
 		client.get(URLString, new WFHttpResponseHandler() {
 
 			@Override
@@ -50,6 +53,10 @@ public class WFAsyncHttpManager {
 			}
 		});
 	}
+	public static void get(String URLString, Map<String, String> headers, WFHttpCachePolicy cachePolicy,final WFHttpResponseHandler handle)
+	{
+		get(URLString, headers, cachePolicy, null, handle);
+	}
 	
 	/**
 	 * POST 请求
@@ -59,11 +66,12 @@ public class WFAsyncHttpManager {
 	 * @param cachePolicy
 	 * @param handle
 	 */
-	public static void post(String URLString, Map<String, String> params, Map<String, String> headers, WFHttpCachePolicy cachePolicy, final WFHttpResponseHandler handle)
+	public static void post(String URLString, Map<String, String> params, Map<String, String> headers, WFHttpCachePolicy cachePolicy,CookieStore cookieStore, final WFHttpResponseHandler handle)
 	{
 		final WFAsyncHttpClient client = getInstance().getHttpClient();
 		client.setPolicy(cachePolicy);
 		client.addHeader(headers);
+		client.setmCookieStore(cookieStore);
 		client.post(URLString, params, new WFHttpResponseHandler() {
 
 			@Override
@@ -85,6 +93,10 @@ public class WFAsyncHttpManager {
 			}
 		});
 		
+	}
+	public static void post(String URLString, Map<String, String> params, Map<String, String> headers, WFHttpCachePolicy cachePolicy, final WFHttpResponseHandler handle)
+	{
+		post(URLString, params, headers, cachePolicy, null, handle);
 	}
 	
 	private WFAsyncHttpClient getHttpClient()

@@ -104,8 +104,15 @@ public class WFHttpTool {
 			for(Map.Entry<String, String> entry : mapParam.entrySet())
 			{
 				String key = entry.getKey();
-				String value = URLDecoder.decode(entry.getValue());
-				rParam.put(key, value);
+				String value = entry.getValue();
+				if(key != null && value != null)
+				{
+					value = URLDecoder.decode(entry.getValue());
+					rParam.put(key, value);
+//					value = URLEncoder.encode(value);
+				}
+				
+				
 			}
 		}
 		return rParam;
