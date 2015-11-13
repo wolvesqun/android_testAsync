@@ -1,6 +1,7 @@
 package com.wolf.testasyncclient;
 
 import java.util.HashMap;
+
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -15,6 +16,7 @@ import com.wolf.http.WFAsyncHttpManager;
 import com.wolf.http.WFHttpCachePolicy;
 import com.wolf.http.WFHttpResponseHandler;
 import com.wolf.http.cache.WFHttpCacheManager;
+import com.wolf.http.cache.WFSharePrefencesManager;
 import com.wolf.http.util.WFHttpEnvironment;
 import com.wolf.testasyncclient.bean.WFUser;
 
@@ -44,11 +46,11 @@ public class MainActivity extends Activity {
 		
 		
 //		testGET();
-		testPOST();
+//		testPOST();
 		
 //		testSaveObject();
 
-		
+		testSharePrefencse();
 	}
 	
 	public void testGET()
@@ -188,6 +190,16 @@ public class MainActivity extends Activity {
 		boolean isExist2 = WFHttpCacheManager.isExist("user");
 		WFUser tempUser2 = (WFUser) WFHttpCacheManager.readObject("user");
 	}
+	
+	public void testSharePrefencse()
+	{
+		WFUser user = new WFUser();
+		user.setUsername("dfadsfa");
+//		WFSharePrefencesManager.saveObject(user, "kWF");
+		
+		WFUser cacheUser = (WFUser) WFSharePrefencesManager.readObject("kWF");
+		
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -195,5 +207,7 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	
+	
 
 }
